@@ -19,7 +19,20 @@
     </ul>
   </nav>
 </header>
-<main>
+<section aria-labelledby="favorites-heading">
+  <h2 id="favorites-heading">
+    Save your bakery favorites
+  </h2>
+  <p>
+    Choose the treats you love and we'll
+    remember them for your next visit.
+  </p>
+  <div id="favorites-list"></div>
+  <p id="favorites-summary" aria-live="polite"></p>
+  <button type="button" id="clear-favorites">
+    Clear my favorites
+  </button>
+</section>
   <h1>Our Breads, Pastries, and Cakes</h1>
   <p>Browse our handmade favorites. Prices are illustrative ranges; contact the bakery to confirm current availability and pricing.</p>
   <section aria-labelledby="breads">
@@ -45,5 +58,6 @@
   <p>North Star Bakery — Baked with care for our neighbors.</p>
   <p>For current hours, pickup availability, and directions, please contact the bakery.</p>
 </footer>
-</body>
+
+<script src="script.js" defer></script>
 </html>
