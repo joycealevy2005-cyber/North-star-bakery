@@ -1,0 +1,113 @@
+
+const bakeryProducts = [
+  { id: "bread", name: "Fresh Artisan Bread" },
+  { id: "pastry", name: "Butter Pastries" },
+  { id: "cake", name: "Celebration Cakes" }
+];
+
+function getFavorites() {
+  try {
+    return JSON.parse(
+      localStorage.getItem("bakeryFavorites") || "[]"
+    );
+  } catch {
+    return [];
+  }
+}
+
+function saveFavorites(favorites) {
+  localStorage.setItem(
+    "bakeryFavorites",
+    JSON.stringify(favorites)
+  );
+}
+
+function updateFavoritesSummary() {
+  const summary = document.getElementById(
+    "favorites-summary"
+  );
+
+  if (!summary) return;
+
+  const favorites = getFavorites();
+
+  const names = bakeryProducts
+    .filter(product => favorites.includes(product.id))
+    .map(product => product.name);
+
+  summary.textContent = names.length
+    ? "Your favorites: " + names.join(", ")
+    : "You haven't selected any favorites yet.";
+}
+
+function toggleFavorite(id) {
+  const favorites = getFavorites();
+
+  const updated = favorites.includes(id)
+    ? favorites.filter(item => item !== id)
+    : [...favorites, id];
+
+  saveFavorites(updated);
+  renderFavorites();
+}
+
+function renderFavorites() {
+  const container = document.getElementById(
+    "favorites-list"
+  );
+
+  if (!container) return;
+
+  container.replaceChildren();
+
+  const favorites = getFavorites();
+
+  bakeryProducts.forEach(product => {
+    const button = document.createElement("button");
+    const selected = favorites.includes(product.id);
+
+    button.type = "button";
+    button.textContent =
+      (selected ? "♥ " : "♡ ") + product.name;
+
+    button.setAttribute(
+      "aria-pressed",
+      String(selected)
+    );
+
+    button.addEventListener("click", () => {
+      toggleFavorite(product.id);
+    });
+
+    container.appendChild(button);
+    container.appendChild(
+      document.createTextNode(" ")
+    );
+  });
+
+  updateFavoritesSummary();
+}
+
+function initializeBakeryFavorites() {
+  renderFavorites();
+
+  const clearButton = document.getElementById(
+    "clear-favorites"
+  );
+
+  if (clearButton) {
+    clearButton.addEventListener("click", () => {
+      saveFavorites([]);
+      renderFavorites();
+    });
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener(
+    "DOMContentLoaded",
+    initializeBakeryFavorites
+  );
+} else {
+  initializeBakeryFavorites();
+}
